@@ -1,0 +1,21 @@
+[project]
+name = "llmvis"
+version = "0.1.0"
+description = "Track brand visibility across LLM responses"
+readme = "README.md"
+requires-python = ">=3.9"
+dependencies = [
+  "typer>=0.9,<0.13",
+  "rich>=13,<14",
+  "httpx>=0.24,<0.28",
+]
+
+[project.scripts]
+llmvis = "llmvis.main:app"
+
+[build-system]
+requires = ["setuptools", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+include = ["llmvis*"]
