@@ -1,13 +1,7 @@
 
 <div align="center">
 
-```
- ____              _   _____ _           ____        _
-|  _ \ __ _ _ __ | | |_   _| |__   ___ | __ )  ___ | |_
-| |_) / _` | '_ \| |   | | | '_ \ / _ \|  _ \ / _ \| __|
-|  _ < (_| | | | | |___| | | | | |  __/| |_) | (_) | |_
-|_| \_\__,_|_| |_|_____|_| |_| |_|\___||____/ \___/ \__|
-```
+<img src="logo.svg" width="64" alt="rankthebot" />
 
 **Track how visible your brand is when people ask ChatGPT — and outrank your competitors.**
 

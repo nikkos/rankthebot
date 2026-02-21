@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 36" width="36" height="36" fill="none">
+  <!-- Terracotta background -->
+  <rect width="36" height="36" rx="9" fill="#c46849"/>
+  <!-- Bubble body -->
+  <rect x="3.5" y="3.5" width="29" height="21" rx="4.5" fill="white"/>
+  <!-- Bubble tail (overlaps body by 1px for seamless join) -->
+  <path d="M10 23.5 L5 32 L19 23.5 Z" fill="white"/>
+  <!-- Ranked list: long=#1, medium=#2, short=#3 -->
+  <rect x="8.5" y="9"  width="18" height="2.5" rx="1.25" fill="#c46849"/>
+  <rect x="8.5" y="14" width="13" height="2.5" rx="1.25" fill="#c46849" opacity="0.5"/>
+  <rect x="8.5" y="19" width="8"  height="2.5" rx="1.25" fill="#c46849" opacity="0.27"/>
+</svg>
