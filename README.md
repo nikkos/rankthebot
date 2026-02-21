@@ -33,6 +33,54 @@ People are increasingly asking ChatGPT and other AI assistants things like *"Wha
 
 ---
 
+## How It Works
+
+Understanding the process helps you get better results. Here is what happens under the hood when you run RankTheBot:
+
+### Step 1 — Query expansion
+
+You start with a broad intent like *"CRM software"*. RankTheBot generates dozens of realistic query variants by combining different **personas** (small business owner, developer, enterprise buyer, agency) and **phrasings** (best X for Y, X comparison, what X should I use). This simulates the wide range of ways real users ask ChatGPT about a topic.
+
+### Step 2 — Scanning
+
+For each query, RankTheBot sends it to **ChatGPT (GPT-4o)** and collects the response. Each query is run multiple times (default: 3) to account for the natural variability in LLM responses — the same question can produce different answers on different runs.
+
+### Step 3 — Brand extraction
+
+Each response is passed to a second AI model (**GPT-4o-mini**) that acts as a parser. It reads the response and extracts every brand mentioned, along with:
+- **Position** — the order in which the brand was mentioned (1 = first)
+- **Sentiment** — whether the mention was positive, neutral, negative, or qualified
+- **Context** — the exact phrase where the brand appeared
+
+All results are stored locally in a SQLite database on your machine.
+
+### Step 4 — Scoring
+
+The visibility score (0–100) is calculated from two signals:
+
+- **Mention rate** — what percentage of runs included your brand
+- **Position weight** — brands mentioned first score higher; position 1 keeps full weight, each subsequent position decays by ~18%
+
+This means a brand that is mentioned in every response but always listed 5th scores lower than a brand mentioned in 80% of responses but always listed first.
+
+### Step 5 — Reporting
+
+Results are displayed as a ranked table in your terminal and can be exported to CSV for further analysis in Google Sheets or Excel.
+
+```
+You  →  define queries
+         ↓
+ChatGPT  →  generates responses
+         ↓
+GPT-4o-mini  →  extracts brand mentions
+         ↓
+SQLite  →  stores everything locally
+         ↓
+rankthebot  →  scores and ranks brands
+```
+
+---
+
 ## Requirements
 
 - A Mac or Linux computer (Windows via WSL also works)
