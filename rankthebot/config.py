@@ -6,9 +6,9 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Optional
 
-APP_DIR = Path.home() / ".llmvis"
+APP_DIR = Path.home() / ".rankthebot"
 CONFIG_PATH = APP_DIR / "config.json"
-DB_PATH = APP_DIR / "llmvis.db"
+DB_PATH = APP_DIR / "rankthebot.db"
 
 
 @dataclass

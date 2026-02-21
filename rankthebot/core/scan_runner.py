@@ -4,9 +4,9 @@ from dataclasses import dataclass
 
 from rich.progress import track
 
-from llmvis.core.llms.openai import OpenAIClient
-from llmvis.core.parser import parse_mentions
-from llmvis.db.store import Store
+from rankthebot.core.llms.openai import OpenAIClient
+from rankthebot.core.parser import parse_mentions
+from rankthebot.db.store import Store
 
 
 @dataclass

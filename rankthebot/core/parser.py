@@ -4,7 +4,7 @@ import json
 import re
 from typing import Any, Optional
 
-from llmvis.core.llms.openai import OpenAIClient
+from rankthebot.core.llms.openai import OpenAIClient
 
 _ALLOWED_SENTIMENTS = {"positive", "neutral", "negative", "qualified"}
 

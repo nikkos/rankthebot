@@ -4,9 +4,9 @@ import typer
 from rich.console import Console
 from rich.table import Table
 
-from llmvis.config import DB_PATH
-from llmvis.core.expander import expand_intent
-from llmvis.db.store import Store
+from rankthebot.config import DB_PATH
+from rankthebot.core.expander import expand_intent
+from rankthebot.db.store import Store
 
 app = typer.Typer(help="Manage query set")
 console = Console()
@@ -27,7 +27,7 @@ def list_queries() -> None:
     store = Store(DB_PATH)
     rows = store.list_queries()
     if not rows:
-        console.print("No queries yet. Add one with [bold]llmvis queries add[/bold].")
+        console.print("No queries yet. Add one with [bold]rankthebot queries add[/bold].")
         return
 
     table = Table(title="Saved Queries")

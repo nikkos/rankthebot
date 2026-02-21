@@ -1,16 +1,294 @@
-# llmvis
 
-CLI for measuring brand visibility in LLM responses.
+<div align="center">
 
-## Quick start
-
-```bash
-python3 -m pip install .
-llmvis auth connect --openai
-llmvis queries add "best email marketing tool"
-llmvis queries expand "CRM software" --review
-llmvis scan --runs 3
-llmvis report visibility --brand yourbrand.com
+```
+ ____              _   _____ _           ____        _
+|  _ \ __ _ _ __ | | |_   _| |__   ___ | __ )  ___ | |_
+| |_) / _` | '_ \| |   | | | '_ \ / _ \|  _ \ / _ \| __|
+|  _ < (_| | | | | |___| | | | | |  __/| |_) | (_) | |_
+|_| \_\__,_|_| |_|_____|_| |_| |_|\___||____/ \___/ \__|
 ```
 
-Phase 1 currently supports `chatgpt` only for scans.
+**Track how visible your brand is when people ask ChatGPT — and outrank your competitors.**
+
+[![Python](https://img.shields.io/badge/Python-3.9%2B-blue?logo=python&logoColor=white)](https://www.python.org/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+[![Made by Nikos Lamprakakis](https://img.shields.io/badge/made%20by-Nikos%20Lamprakakis-orange)](https://github.com/nikkos)
+
+</div>
+
+---
+
+## What is rankthebot?
+
+People are increasingly asking ChatGPT and other AI assistants things like *"What's the best CRM software?"* or *"Which project management tool should I use?"* — and your brand may or may not be showing up in those answers.
+
+**rankthebot** is a command-line tool that:
+
+- Runs hundreds of relevant queries against ChatGPT
+- Detects which brands get mentioned — and in what position
+- Scores your brand's **LLM visibility** from 0 to 100
+- Shows you exactly **which competitors** are winning in AI responses
+- Exports everything to **CSV** for easy analysis in Excel or Google Sheets
+
+---
+
+## Requirements
+
+- A Mac or Linux computer (Windows via WSL also works)
+- Python 3.9 or higher ([download here](https://www.python.org/downloads/))
+- An OpenAI API key ([get one here](https://platform.openai.com/api-keys))
+
+### Check your Python version
+
+Open your terminal and run:
+
+```bash
+python3 --version
+```
+
+You should see `Python 3.9.x` or higher. If not, [download Python here](https://www.python.org/downloads/).
+
+---
+
+## Installation
+
+### Step 1 — Download rankthebot
+
+Clone the repository or download it as a ZIP:
+
+```bash
+git clone https://github.com/nikkos/rankthebot.git
+cd rankthebot
+```
+
+Or [click here to download the ZIP](https://github.com/nikkos/rankthebot/archive/refs/heads/main.zip), unzip it, and open your terminal in that folder.
+
+### Step 2 — Install rankthebot
+
+Run this command inside the project folder:
+
+```bash
+pip3 install -e .
+```
+
+### Step 3 — Add rankthebot to your PATH
+
+After installation, you may need to add the install location to your PATH so you can run `rankthebot` from anywhere.
+
+**On Mac (zsh):**
+
+```bash
+echo 'export PATH="$HOME/Library/Python/3.9/bin:$PATH"' >> ~/.zshrc
+source ~/.zshrc
+```
+
+**On Linux:**
+
+```bash
+echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.bashrc
+source ~/.bashrc
+```
+
+### Step 4 — Verify the installation
+
+```bash
+rankthebot --help
+```
+
+You should see the rankthebot command menu. You are ready to go!
+
+---
+
+## Security — Protecting your API key
+
+> **Your OpenAI API key is stored locally on your machine only.**
+> It is saved in `~/.rankthebot/config.json` — a hidden folder in your home directory, **outside** the project folder.
+> This means it is **never** committed to Git or uploaded to GitHub.
+
+Never share your `~/.rankthebot/config.json` file with anyone.
+If you accidentally expose your key, [rotate it immediately](https://platform.openai.com/api-keys).
+
+---
+
+## Quick Start
+
+### 1. Connect your OpenAI API key
+
+```bash
+rankthebot auth connect --openai
+```
+
+You will be prompted to paste your API key. It is hidden while you type.
+
+---
+
+### 2. Add the queries you want to track
+
+Add queries one by one:
+
+```bash
+rankthebot queries add "best CRM software"
+rankthebot queries add "best project management tool"
+```
+
+Or automatically generate dozens of variants from a single intent:
+
+```bash
+rankthebot queries expand "CRM software"
+```
+
+This generates queries like:
+- *"best CRM software for small business owner"*
+- *"CRM software comparison for enterprise buyer"*
+- *"what CRM software should I use as a developer"*
+
+See all saved queries:
+
+```bash
+rankthebot queries list
+```
+
+---
+
+### 3. Run a scan
+
+First, do a dry run to see how many API calls it will make (and estimate cost):
+
+```bash
+rankthebot scan --dry-run
+```
+
+Then run the actual scan:
+
+```bash
+rankthebot scan
+```
+
+By default it runs **3 passes per query**. You can change this:
+
+```bash
+rankthebot scan --runs 5
+```
+
+> **Typical cost:** ~$0.80–$1.50 for 65 queries x 3 runs using GPT-4o.
+
+---
+
+### 4. View your brand's visibility report
+
+```bash
+rankthebot report visibility --brand "hubspot"
+```
+
+**Example output:**
+
+```
+         Visibility Report - hubspot
+┌──────────┬───────────────┬──────────────┬───────┐
+│ LLM      │ Mention Rate  │ Avg Position │ Score │
+├──────────┼───────────────┼──────────────┼───────┤
+│ chatgpt  │ 100.0%        │ 1.91         │ 83.7  │
+└──────────┴───────────────┴──────────────┴───────┘
+Overall Score: 83.7/100
+```
+
+Save to CSV for Google Sheets or Excel:
+
+```bash
+rankthebot report visibility --brand "hubspot" --output visibility.csv
+```
+
+---
+
+### 5. See your top competitors
+
+```bash
+rankthebot report competitors
+```
+
+Exclude your own brand to focus on the competition:
+
+```bash
+rankthebot report competitors --exclude "hubspot"
+```
+
+Save to CSV:
+
+```bash
+rankthebot report competitors --output competitors.csv
+```
+
+**Example output:**
+
+```
+           Top Competitors by LLM Visibility
+┌────┬─────────────────────────┬───────────┬─────────────┬──────────────┬───────┐
+│  # │ Brand                   │ Mention % │ Runs        │ Avg Position │ Score │
+├────┼─────────────────────────┼───────────┼─────────────┼──────────────┼───────┤
+│  1 │ HubSpot CRM             │ 93.8%     │ 183/195     │ 1.70         │ 82.0  │
+│  2 │ Zoho CRM                │ 93.3%     │ 182/195     │ 2.59         │ 66.6  │
+│  3 │ Pipedrive               │ 66.7%     │ 130/195     │ 4.22         │ 28.0  │
+└────┴─────────────────────────┴───────────┴─────────────┴──────────────┴───────┘
+```
+
+---
+
+## Understanding the Score
+
+The **visibility score (0–100)** combines two factors:
+
+| Factor | What it measures |
+|--------|-----------------|
+| **Mention rate** | How often your brand appears across all queries |
+| **Avg position** | How early in the response your brand is mentioned (position 1 = first) |
+
+A brand mentioned in 100% of responses at position 1 scores **100/100**.
+A brand mentioned in 50% of responses at position 5 scores much lower.
+
+---
+
+## Full Command Reference
+
+```
+rankthebot auth connect --openai              Connect your OpenAI API key
+
+rankthebot queries add "query text"          Add a single query
+rankthebot queries expand "intent"           Generate query variants from an intent
+rankthebot queries list                      List all saved queries
+
+rankthebot scan                              Run the scan
+rankthebot scan --dry-run                    Estimate API calls without running
+rankthebot scan --runs 5                     Set number of runs per query (default: 3)
+
+rankthebot report visibility --brand NAME    Show your brand's visibility score
+rankthebot report competitors                Show top brands by LLM visibility
+rankthebot report competitors --exclude NAME Exclude a brand (e.g. your own)
+rankthebot report competitors --limit 10     Show top 10 only (default: 15)
+
+All report commands support:
+  --output results.csv                   Save results to CSV file
+```
+
+---
+
+## CSV Export — Google Sheets
+
+After exporting, open the CSV directly in Google Sheets:
+
+1. Go to [sheets.google.com](https://sheets.google.com)
+2. Click **File → Import**
+3. Upload your CSV file
+4. Select **"Comma"** as the separator
+
+---
+
+## License
+
+MIT License — free to use, modify, and distribute.
+
+---
+
+<div align="center">
+Built by <a href="https://github.com/nikkos">Nikos Lamprakakis</a>
+</div>

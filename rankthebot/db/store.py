@@ -5,7 +5,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Iterable, Optional
 
-from llmvis.db.models import SCHEMA_SQL
+from rankthebot.db.models import SCHEMA_SQL
 
 
 class Store:

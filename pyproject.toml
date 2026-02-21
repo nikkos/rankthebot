@@ -1,7 +1,7 @@
 [project]
-name = "llmvis"
+name = "rankthebot"
 version = "0.1.0"
-description = "Track brand visibility across LLM responses"
+description = "RankTheBot — Track your brand visibility across LLM responses"
 readme = "README.md"
 requires-python = ">=3.9"
 dependencies = [
@@ -11,11 +11,11 @@ dependencies = [
 ]
 
 [project.scripts]
-llmvis = "llmvis.main:app"
+rankthebot = "rankthebot.main:app"
 
 [build-system]
 requires = ["setuptools", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [tool.setuptools.packages.find]
-include = ["llmvis*"]
+include = ["rankthebot*"]

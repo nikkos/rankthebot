@@ -5,7 +5,7 @@ from typing import Optional
 import typer
 from rich.console import Console
 
-from llmvis.config import Config
+from rankthebot.config import Config
 
 app = typer.Typer(help="Manage API credentials")
 console = Console()

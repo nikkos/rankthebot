@@ -3,10 +3,10 @@ from __future__ import annotations
 import typer
 from rich.console import Console
 
-from llmvis.config import Config, DB_PATH
-from llmvis.core.llms.openai import OpenAIClient
-from llmvis.core.scan_runner import ScanSettings, run_scan
-from llmvis.db.store import Store
+from rankthebot.config import Config, DB_PATH
+from rankthebot.core.llms.openai import OpenAIClient
+from rankthebot.core.scan_runner import ScanSettings, run_scan
+from rankthebot.db.store import Store
 
 console = Console()
 
@@ -18,7 +18,7 @@ def scan(
 ) -> None:
     cfg = Config.load()
     if not cfg.openai_api_key:
-        raise typer.BadParameter("Missing OpenAI key. Run: llmvis auth connect --openai")
+        raise typer.BadParameter("Missing OpenAI key. Run: rankthebot auth connect --openai")
 
     store = Store(DB_PATH)
     llm_list = [x.strip() for x in llms.split(",") if x.strip()]
