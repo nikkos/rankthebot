@@ -3,7 +3,7 @@
 
 <img src="logo.svg" width="64" alt="rankthebot" />
 
-**Track how visible your brand is when people ask ChatGPT — and outrank your competitors.**
+**Track how visible your brand is when people ask ChatGPT or Claude — and outrank your competitors.**
 
 [![Python](https://img.shields.io/badge/Python-3.9%2B-blue?logo=python&logoColor=white)](https://www.python.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
@@ -15,13 +15,13 @@
 
 ## What is rankthebot?
 
-People are increasingly asking ChatGPT and other AI assistants things like *"What's the best CRM software?"* or *"Which project management tool should I use?"* — and your brand may or may not be showing up in those answers.
+People are increasingly asking ChatGPT, Claude, and other AI assistants things like *"What's the best CRM software?"* or *"Which project management tool should I use?"* — and your brand may or may not be showing up in those answers.
 
 **rankthebot** is a command-line tool that:
 
-- Runs hundreds of relevant queries against ChatGPT
+- Runs hundreds of relevant queries against **ChatGPT and/or Claude**
 - Detects which brands get mentioned — and in what position
-- Scores your brand's **LLM visibility** from 0 to 100
+- Scores your brand's **LLM visibility** from 0 to 100, per LLM
 - Shows you exactly **which competitors** are winning in AI responses
 - Exports everything to **CSV** for easy analysis in Excel or Google Sheets
 
@@ -37,7 +37,7 @@ You start with a broad intent like *"CRM software"*. RankTheBot generates dozens
 
 ### Step 2 — Scanning
 
-For each query, RankTheBot sends it to **ChatGPT (GPT-4o)** and collects the response. Each query is run multiple times (default: 3) to account for the natural variability in LLM responses — the same question can produce different answers on different runs.
+For each query, RankTheBot sends it to your chosen LLM(s) — **ChatGPT (GPT-4o)** and/or **Claude (claude-opus-4-6)** — and collects the response. Each query is run multiple times (default: 3) to account for the natural variability in LLM responses — the same question can produce different answers on different runs. Running both LLMs lets you compare how your brand is perceived across different AI assistants.
 
 ### Step 3 — Brand extraction
 
@@ -64,13 +64,13 @@ Results are displayed as a ranked table in your terminal and can be exported to 
 ```
 You  →  define queries
          ↓
-ChatGPT  →  generates responses
+ChatGPT / Claude  →  generate responses
          ↓
 GPT-4o-mini  →  extracts brand mentions
          ↓
-SQLite  →  stores everything locally
+SQLite  →  stores everything locally (tagged by LLM)
          ↓
-rankthebot  →  scores and ranks brands
+rankthebot  →  scores and ranks brands, per LLM
 ```
 
 ---
@@ -79,7 +79,8 @@ rankthebot  →  scores and ranks brands
 
 - A Mac or Linux computer (Windows via WSL also works)
 - Python 3.9 or higher ([download here](https://www.python.org/downloads/))
-- An OpenAI API key ([get one here](https://platform.openai.com/api-keys))
+- An OpenAI API key ([get one here](https://platform.openai.com/api-keys)) — required for scanning with ChatGPT and for brand extraction
+- An Anthropic API key ([get one here](https://console.anthropic.com/settings/keys)) — optional, required only if you want to scan with Claude
 
 ### Check your Python version
 
@@ -142,23 +143,33 @@ You should see the rankthebot command menu. You are ready to go!
 
 ---
 
-## Security — Protecting your API key
+## Security — Protecting your API keys
 
-> **Your OpenAI API key is stored locally on your machine only.**
-> It is saved in `~/.rankthebot/config.json` — a hidden folder in your home directory, **outside** the project folder.
-> This means it is **never** committed to Git or uploaded to GitHub.
+> **Your API keys are stored locally on your machine only.**
+> They are saved in `~/.rankthebot/config.json` — a hidden folder in your home directory, **outside** the project folder.
+> This means they are **never** committed to Git or uploaded to GitHub.
 
 Never share your `~/.rankthebot/config.json` file with anyone.
-If you accidentally expose your key, [rotate it immediately](https://platform.openai.com/api-keys).
+If you accidentally expose a key, rotate it immediately:
+- OpenAI: [platform.openai.com/api-keys](https://platform.openai.com/api-keys)
+- Anthropic: [console.anthropic.com/settings/keys](https://console.anthropic.com/settings/keys)
 
 ---
 
 ## Quick Start
 
-### 1. Connect your OpenAI API key
+### 1. Connect your API key(s)
+
+Connect OpenAI (required):
 
 ```bash
 rankthebot auth connect --openai
+```
+
+Connect Anthropic (optional — needed to scan with Claude):
+
+```bash
+rankthebot auth connect --anthropic
 ```
 
 You will be prompted to paste your API key. It is hidden while you type.
@@ -207,13 +218,20 @@ Then run the actual scan:
 rankthebot scan
 ```
 
+Scan with Claude instead of (or in addition to) ChatGPT:
+
+```bash
+rankthebot scan --llms claude
+rankthebot scan --llms chatgpt,claude
+```
+
 By default it runs **3 passes per query**. You can change this:
 
 ```bash
 rankthebot scan --runs 5
 ```
 
-> **Typical cost:** ~$0.80–$1.50 for 65 queries x 3 runs using GPT-4o.
+> **Typical cost:** ~$0.80–$1.50 for 65 queries × 3 runs using GPT-4o. Claude costs vary by model — claude-opus-4-6 is comparable to GPT-4o.
 
 ---
 
@@ -223,7 +241,7 @@ rankthebot scan --runs 5
 rankthebot report visibility --brand "hubspot"
 ```
 
-**Example output:**
+**Example output (with both LLMs):**
 
 ```
          Visibility Report - hubspot
@@ -231,8 +249,9 @@ rankthebot report visibility --brand "hubspot"
 │ LLM      │ Mention Rate  │ Avg Position │ Score │
 ├──────────┼───────────────┼──────────────┼───────┤
 │ chatgpt  │ 100.0%        │ 1.91         │ 83.7  │
+│ claude   │ 87.5%         │ 2.10         │ 71.4  │
 └──────────┴───────────────┴──────────────┴───────┘
-Overall Score: 83.7/100
+Overall Score: 77.6/100
 ```
 
 Save to CSV for Google Sheets or Excel:
@@ -293,13 +312,16 @@ A brand mentioned in 50% of responses at position 5 scores much lower.
 ## Full Command Reference
 
 ```
-rankthebot auth connect --openai              Connect your OpenAI API key
+rankthebot auth connect --openai              Connect your OpenAI API key (required)
+rankthebot auth connect --anthropic           Connect your Anthropic API key (for Claude)
 
 rankthebot queries add "query text"          Add a single query
 rankthebot queries expand "intent"           Generate query variants from an intent
 rankthebot queries list                      List all saved queries
 
-rankthebot scan                              Run the scan
+rankthebot scan                              Run the scan (ChatGPT by default)
+rankthebot scan --llms claude                Scan with Claude only
+rankthebot scan --llms chatgpt,claude        Scan with both LLMs
 rankthebot scan --dry-run                    Estimate API calls without running
 rankthebot scan --runs 5                     Set number of runs per query (default: 3)
 
