@@ -11,11 +11,11 @@ from rankthebot.db.store import Store
 
 console = Console()
 
-SUPPORTED_LLMS = {"chatgpt", "claude"}
+SUPPORTED_LLMS = {"chatgpt", "gpt5", "claude"}
 
 
 def scan(
-    llms: str = typer.Option("chatgpt", "--llms", help="Comma-separated LLMs (chatgpt, claude)"),
+    llms: str = typer.Option("chatgpt", "--llms", help="Comma-separated LLMs (chatgpt, gpt5, claude)"),
     runs: int = typer.Option(3, min=1, max=20, help="Runs per query"),
     workers: int = typer.Option(10, min=1, max=50, help="Concurrent API workers (default: 10)"),
     dry_run: bool = typer.Option(False, "--dry-run", help="Estimate calls without executing"),
