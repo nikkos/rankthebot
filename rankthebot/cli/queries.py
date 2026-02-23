@@ -39,6 +39,27 @@ def list_queries() -> None:
     console.print(table)
 
 
+@app.command("clear")
+def clear(
+    yes: bool = typer.Option(False, "--yes", "-y", help="Skip confirmation prompt"),
+) -> None:
+    """Delete all saved queries and their scan history."""
+    store = Store(DB_PATH)
+    rows = store.list_queries()
+    if not rows:
+        console.print("No queries to clear.")
+        return
+
+    if not yes:
+        typer.confirm(
+            f"This will permanently delete all {len(rows)} queries and their scan data. Continue?",
+            abort=True,
+        )
+
+    deleted = store.clear_queries()
+    console.print(f"[green]Cleared {deleted} queries and all associated scan data.[/green]")
+
+
 @app.command("expand")
 def expand(
     intent: str = typer.Argument(..., help="Base intent, e.g. 'CRM software'"),

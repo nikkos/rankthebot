@@ -39,6 +39,17 @@ class Store:
             assert row is not None
             return int(row["id"]), False
 
+    def clear_queries(self) -> int:
+        """Delete all queries and their associated runs and mentions. Returns count deleted."""
+        with self._connect() as conn:
+            count = conn.execute("SELECT COUNT(*) FROM queries").fetchone()[0]
+            conn.executescript("""
+                DELETE FROM parsed_mentions;
+                DELETE FROM query_runs;
+                DELETE FROM queries;
+            """)
+        return count
+
     def list_queries(self) -> list[sqlite3.Row]:
         with self._connect() as conn:
             rows = conn.execute(
