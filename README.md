@@ -37,11 +37,11 @@ You start with a broad intent like *"CRM software"*. RankTheBot generates dozens
 
 ### Step 2 — Scanning
 
-For each query, RankTheBot sends it to your chosen LLM(s) — **ChatGPT (GPT-4o)** and/or **Claude (claude-sonnet-4-6)** — and collects the response. Each query is run multiple times (default: 3) to account for the natural variability in LLM responses — the same question can produce different answers on different runs. Running both LLMs lets you compare how your brand is perceived across different AI assistants.
+For each query, RankTheBot sends it to your chosen LLM(s) — **ChatGPT (GPT-5.2)** and/or **Claude (claude-sonnet-4-6)** — and collects the response. Each query is run multiple times (default: 3) to account for the natural variability in LLM responses — the same question can produce different answers on different runs. Running both LLMs lets you compare how your brand is perceived across different AI assistants.
 
 ### Step 3 — Brand extraction
 
-Each response is passed to a second AI model (**GPT-4o-mini**) that acts as a parser. It reads the response and extracts every brand mentioned, along with:
+Each response is passed to a second AI model (**GPT-5-mini**) that acts as a parser. It reads the response and extracts every brand mentioned, along with:
 - **Position** — the order in which the brand was mentioned (1 = first)
 - **Sentiment** — whether the mention was positive, neutral, negative, or qualified
 - **Context** — the exact phrase where the brand appeared
@@ -66,7 +66,7 @@ You  →  define queries
          ↓
 ChatGPT / Claude  →  generate responses
          ↓
-GPT-4o-mini  →  extracts brand mentions
+GPT-5.2-mini  →  extracts brand mentions
          ↓
 SQLite  →  stores everything locally (tagged by LLM)
          ↓
@@ -238,7 +238,7 @@ rankthebot scan --workers 20   # faster, higher API burst
 rankthebot scan --workers 3    # slower, conservative rate limiting
 ```
 
-> **Typical cost:** ~$0.80–$1.50 for 65 queries × 3 runs using GPT-4o. Claude costs vary by model — claude-sonnet-4-6 is comparable to GPT-4o.
+> **Typical cost:** ~$0.80–$1.50 for 65 queries × 3 runs using GPT-5.2. Claude costs vary by model — claude-sonnet-4-6 is comparable to GPT-5.2.
 
 ---
 

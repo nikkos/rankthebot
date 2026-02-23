@@ -6,7 +6,7 @@ import httpx
 
 
 class OpenAIClient:
-    def __init__(self, api_key: str, model: str = "gpt-4o"):
+    def __init__(self, api_key: str, model: str = "gpt-5.2"):
         self.api_key = api_key
         self.model = model
         self.base_url = "https://api.openai.com/v1"
