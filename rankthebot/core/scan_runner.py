@@ -33,6 +33,8 @@ def _run_one(
 ) -> bool:
     if llm == "chatgpt":
         raw = openai_client.complete(query_text)
+    elif llm == "gpt5":
+        raw = openai_client.complete(query_text, model="gpt-5", temperature=None)
     elif llm == "claude" and anthropic_client is not None:
         raw = anthropic_client.complete(query_text)
     else:
@@ -63,7 +65,7 @@ def run_scan(
     if not queries:
         return (0, 0)
 
-    supported = {"chatgpt", "claude"}
+    supported = {"chatgpt", "gpt5", "claude"}
     requested = [llm.strip().lower() for llm in settings.llms if llm.strip()]
     llms = [llm for llm in requested if llm in supported] or ["chatgpt"]
 
