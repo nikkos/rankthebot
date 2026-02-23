@@ -37,7 +37,7 @@ You start with a broad intent like *"CRM software"*. RankTheBot generates dozens
 
 ### Step 2 — Scanning
 
-For each query, RankTheBot sends it to your chosen LLM(s) — **ChatGPT (GPT-4o)** and/or **Claude (claude-opus-4-6)** — and collects the response. Each query is run multiple times (default: 3) to account for the natural variability in LLM responses — the same question can produce different answers on different runs. Running both LLMs lets you compare how your brand is perceived across different AI assistants.
+For each query, RankTheBot sends it to your chosen LLM(s) — **ChatGPT (GPT-4o)** and/or **Claude (claude-sonnet-4-6)** — and collects the response. Each query is run multiple times (default: 3) to account for the natural variability in LLM responses — the same question can produce different answers on different runs. Running both LLMs lets you compare how your brand is perceived across different AI assistants.
 
 ### Step 3 — Brand extraction
 
@@ -231,7 +231,7 @@ By default it runs **3 passes per query**. You can change this:
 rankthebot scan --runs 5
 ```
 
-> **Typical cost:** ~$0.80–$1.50 for 65 queries × 3 runs using GPT-4o. Claude costs vary by model — claude-opus-4-6 is comparable to GPT-4o.
+> **Typical cost:** ~$0.80–$1.50 for 65 queries × 3 runs using GPT-4o. Claude costs vary by model — claude-sonnet-4-6 is comparable to GPT-4o.
 
 ---
 
