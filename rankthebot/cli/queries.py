@@ -4,8 +4,9 @@ import typer
 from rich.console import Console
 from rich.table import Table
 
-from rankthebot.config import DB_PATH
+from rankthebot.config import DB_PATH, Config
 from rankthebot.core.expander import expand_intent
+from rankthebot.core.llms.openai import OpenAIClient
 from rankthebot.db.store import Store
 
 app = typer.Typer(help="Manage query set")
@@ -63,16 +64,30 @@ def clear(
 @app.command("expand")
 def expand(
     intent: str = typer.Argument(..., help="Base intent, e.g. 'CRM software'"),
-    review: bool = typer.Option(False, "--review", help="Show variants without saving"),
+    count: int = typer.Option(40, "--count", "-n", min=5, max=100, help="Number of queries to generate (default: 40)"),
+    review: bool = typer.Option(False, "--review", help="Show generated queries without saving"),
 ) -> None:
-    store = Store(DB_PATH)
-    variants = expand_intent(intent)
+    """Use AI to generate realistic query variants from an intent."""
+    cfg = Config.load()
+    if not cfg.openai_api_key:
+        raise typer.BadParameter("Missing OpenAI key. Run: rankthebot auth connect --openai")
+
+    client = OpenAIClient(cfg.openai_api_key)
+
+    console.print(f"Generating [bold]{count}[/bold] queries for: [italic]{intent}[/italic]...")
+    variants = expand_intent(intent, client, count=count)
+
+    if not variants:
+        console.print("[red]No queries generated. Check your OpenAI key and try again.[/red]")
+        raise typer.Exit(1)
+
     if review:
-        console.print(f"Generated [bold]{len(variants)}[/bold] variants:")
+        console.print(f"\nGenerated [bold]{len(variants)}[/bold] queries:")
         for v in variants:
-            console.print(f"- {v}")
+            console.print(f"  - {v}")
         return
 
+    store = Store(DB_PATH)
     inserted = 0
     for v in variants:
         _, is_new = store.add_query(v)
@@ -80,6 +95,6 @@ def expand(
             inserted += 1
 
     console.print(
-        f"Expanded intent into [bold]{len(variants)}[/bold] variants. "
+        f"Generated [bold]{len(variants)}[/bold] queries. "
         f"Inserted [bold]{inserted}[/bold] new queries."
     )
