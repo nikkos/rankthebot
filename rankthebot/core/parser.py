@@ -62,8 +62,10 @@ def parse_mentions(raw_response: str, parser_client: Optional[OpenAIClient] = No
     )
 
     try:
-        out = parser_client.complete(prompt, temperature=0.0, model="gpt-5-mini")
-    except Exception:
+        out = parser_client.complete(prompt, temperature=0.0, model="gpt-4o-mini")
+    except Exception as e:
+        import sys
+        print(f"[parser] API error: {e}", file=sys.stderr)
         return []
 
     block = _extract_json_block(out)
