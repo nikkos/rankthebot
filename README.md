@@ -66,7 +66,7 @@ You  →  define queries
          ↓
 ChatGPT / Claude  →  generate responses
          ↓
-GPT-5.2-mini  →  extracts brand mentions
+GPT-5-mini  →  extracts brand mentions
          ↓
 SQLite  →  stores everything locally (tagged by LLM)
          ↓
