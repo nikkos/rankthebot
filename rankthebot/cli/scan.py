@@ -17,6 +17,7 @@ SUPPORTED_LLMS = {"chatgpt", "claude"}
 def scan(
     llms: str = typer.Option("chatgpt", "--llms", help="Comma-separated LLMs (chatgpt, claude)"),
     runs: int = typer.Option(3, min=1, max=20, help="Runs per query"),
+    workers: int = typer.Option(10, min=1, max=50, help="Concurrent API workers (default: 10)"),
     dry_run: bool = typer.Option(False, "--dry-run", help="Estimate calls without executing"),
 ) -> None:
     cfg = Config.load()
@@ -44,7 +45,7 @@ def scan(
     openai_client = OpenAIClient(cfg.openai_api_key)
     anthropic_client = AnthropicClient(cfg.anthropic_api_key) if cfg.anthropic_api_key else None
 
-    settings = ScanSettings(runs=runs, llms=llm_list, dry_run=dry_run)
+    settings = ScanSettings(runs=runs, llms=llm_list, dry_run=dry_run, workers=workers)
     total_calls, completed = run_scan(store, openai_client, settings, anthropic_client=anthropic_client)
 
     if dry_run:

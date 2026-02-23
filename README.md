@@ -231,6 +231,13 @@ By default it runs **3 passes per query**. You can change this:
 rankthebot scan --runs 5
 ```
 
+Scans run **10 concurrent workers** by default, reducing a typical scan from 40+ minutes to 3–5 minutes. Raise or lower the limit if needed:
+
+```bash
+rankthebot scan --workers 20   # faster, higher API burst
+rankthebot scan --workers 3    # slower, conservative rate limiting
+```
+
 > **Typical cost:** ~$0.80–$1.50 for 65 queries × 3 runs using GPT-4o. Claude costs vary by model — claude-sonnet-4-6 is comparable to GPT-4o.
 
 ---
@@ -324,6 +331,7 @@ rankthebot scan --llms claude                Scan with Claude only
 rankthebot scan --llms chatgpt,claude        Scan with both LLMs
 rankthebot scan --dry-run                    Estimate API calls without running
 rankthebot scan --runs 5                     Set number of runs per query (default: 3)
+rankthebot scan --workers 20                 Set concurrent API workers (default: 10)
 
 rankthebot report visibility --brand NAME    Show your brand's visibility score
 rankthebot report competitors                Show top brands by LLM visibility
