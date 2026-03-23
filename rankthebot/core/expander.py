@@ -23,7 +23,7 @@ def expand_intent(intent: str, client: "OpenAIClient", count: int = 40) -> list[
         'Format: ["query one", "query two", ...]'
     )
 
-    raw = client.complete(prompt, temperature=0.8, model="gpt-4o-mini")
+    raw = client.complete(prompt, temperature=0.8, model="gpt-5.2")
 
     match = re.search(r"\[.*\]", raw, re.DOTALL)
     if not match:
