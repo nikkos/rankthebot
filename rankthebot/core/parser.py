@@ -54,7 +54,10 @@ def parse_mentions(raw_response: str, parser_client: Optional[OpenAIClient] = No
         return []
 
     prompt = (
-        "Extract all mentioned brands/products from the response below as JSON array. "
+        "Extract all mentioned companies, products, and services (brands) from the response below as a JSON array. "
+        "Only include actual brand names — companies, apps, platforms, tools, or named products. "
+        "Do NOT include: geographic locations, cities, neighborhoods, streets, metro stations, "
+        "transport lines, infrastructure, general terms, or common nouns. "
         "Each item must contain: brand, position (first mention order, starting at 1), "
         "sentiment (positive|neutral|negative|qualified), context (short quoted phrase). "
         "Return JSON only.\n\n"
