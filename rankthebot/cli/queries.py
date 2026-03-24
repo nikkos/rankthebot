@@ -61,6 +61,26 @@ def clear(
     console.print(f"[green]Cleared {deleted} queries and all associated scan data.[/green]")
 
 
+@app.command("import")
+def import_queries(
+    file: typer.FileText = typer.Argument(..., help="Text file with one query per line"),
+) -> None:
+    """Import queries from a text file (one query per line)."""
+    store = Store(DB_PATH)
+    inserted = 0
+    skipped = 0
+    for line in file:
+        query = line.strip()
+        if not query or query.startswith("#"):
+            continue
+        _, is_new = store.add_query(query)
+        if is_new:
+            inserted += 1
+        else:
+            skipped += 1
+    console.print(f"[green]Inserted {inserted} new queries.[/green] Skipped {skipped} duplicates.")
+
+
 @app.command("expand")
 def expand(
     intent: str = typer.Argument(..., help="Base intent, e.g. 'CRM software'"),
